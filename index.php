@@ -55,6 +55,15 @@
 
     ?>
     <div class="container">
+        <!-- FORM -->
+        <form action="index.php" method="get">
+            <div class="d-flex justify-content-end align-items-center my-3">
+                <input class="form-check-input pe-1" type="checkbox" id="" name="parking" value="true" />
+                <label class="form-check-label pe-4" for="">Parking</label>
+                <button type="submit" class="btn btn-dark btn-sm">Filtra</button>
+            </div>
+        </form>
+
         <h1 class="text-center p-4">Hotels in the city</h1>
 
         <ul class="list-group list-group-horizontal fw-bold rounded-0">
@@ -66,15 +75,26 @@
         </ul>
 
         <?php
+        // Salvataggio del parametro parcheggio della query url in una variabile
+        $parkingfree = $_GET["parking"]??"";
         // Avvio un ciclo sull'array
         foreach ($hotels as $hotel) {
-            //Condizione per il parcheggio
+
+        // Condizione per verificare se l'hotel abbia un parcheggio
+            $showElement=true;
+            if($parkingfree && $hotel["parking"]===false){
+                $showElement=false;
+            }
+
+
+            //Condizione per il testo del campo parking
             if ($hotel["parking"]) {
                 $parking = "Yes";
             } else {
                 $parking = "No";
             }
-            // Stampo in pagina la card
+            // Stampo in pagina la card se la condizione è rispettata sennò no
+            if($showElement){
             echo "
             <ul class='list-group list-group-horizontal rounded-0'>
                 <li class='list-group-item rounded-0 col-2'>$hotel[name]</li>
@@ -83,7 +103,7 @@
                 <li class='list-group-item col-2'>$hotel[vote]/5</li>
                 <li class='list-group-item rounded-0 col-2'>$hotel[distance_to_center] km</li>
             </ul>
-        ";
+        ";}
         }
         ?>
     </div>
